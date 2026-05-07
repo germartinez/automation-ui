@@ -1,0 +1,207 @@
+export const safeAbi = [
+  {
+    type: 'function',
+    name: 'VERSION',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [{ type: 'string' }],
+  },
+  {
+    type: 'function',
+    name: 'isModuleEnabled',
+    stateMutability: 'view',
+    inputs: [{ name: 'module', type: 'address' }],
+    outputs: [{ type: 'bool' }],
+  },
+  {
+    type: 'function',
+    name: 'enableModule',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'module', type: 'address' }],
+    outputs: [],
+  },
+] as const;
+
+export const automationModuleAbi = [
+  {
+    type: 'function',
+    name: 'createAutomation',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'strategy', type: 'address' },
+      { name: 'to', type: 'address' },
+      { name: 'value', type: 'uint256' },
+      { name: 'data', type: 'bytes' },
+      { name: 'trigger', type: 'bytes' },
+      { name: 'salt', type: 'bytes32' },
+      { name: 'title', type: 'string' },
+    ],
+    outputs: [{ name: 'automationHash', type: 'bytes32' }],
+  },
+  {
+    type: 'function',
+    name: 'execute',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'automationHash', type: 'bytes32' },
+      { name: 'to', type: 'address' },
+      { name: 'value', type: 'uint256' },
+      { name: 'data', type: 'bytes' },
+      { name: 'salt', type: 'bytes32' },
+    ],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'canExecute',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'automationHash', type: 'bytes32' },
+      { name: 'to', type: 'address' },
+      { name: 'value', type: 'uint256' },
+      { name: 'data', type: 'bytes' },
+      { name: 'salt', type: 'bytes32' },
+    ],
+    outputs: [{ type: 'bool' }],
+  },
+  {
+    type: 'function',
+    name: 'pauseAutomation',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'automationHash', type: 'bytes32' }],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'resumeAutomation',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'automationHash', type: 'bytes32' }],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'deleteAutomation',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'automationHash', type: 'bytes32' }],
+    outputs: [],
+  },
+  {
+    type: 'function',
+    name: 'automations',
+    stateMutability: 'view',
+    inputs: [{ name: 'automationHash', type: 'bytes32' }],
+    outputs: [
+      { name: 'safe', type: 'address' },
+      { name: 'lastExecuted', type: 'uint40' },
+      { name: 'executionCount', type: 'uint48' },
+      { name: 'isActive', type: 'bool' },
+      { name: 'strategy', type: 'address' },
+      { name: 'arrayIndex', type: 'uint32' },
+      { name: 'trigger', type: 'bytes' },
+      { name: 'title', type: 'string' },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'getAutomations',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'safe', type: 'address' },
+      { name: 'offset', type: 'uint256' },
+      { name: 'count', type: 'uint256' },
+    ],
+    outputs: [
+      { name: 'slice', type: 'bytes32[]' },
+      { name: 'total', type: 'uint256' },
+    ],
+  },
+  {
+    type: 'event',
+    name: 'AutomationCreated',
+    inputs: [
+      { name: 'automationHash', type: 'bytes32', indexed: true },
+      { name: 'safe', type: 'address', indexed: true },
+      { name: 'strategy', type: 'address', indexed: true },
+      { name: 'chainId', type: 'uint256', indexed: false },
+      { name: 'to', type: 'address', indexed: false },
+      { name: 'value', type: 'uint256', indexed: false },
+      { name: 'data', type: 'bytes', indexed: false },
+      { name: 'trigger', type: 'bytes', indexed: false },
+      { name: 'salt', type: 'bytes32', indexed: false },
+      { name: 'title', type: 'string', indexed: false },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'AutomationPaused',
+    inputs: [
+      { name: 'automationHash', type: 'bytes32', indexed: true },
+      { name: 'safe', type: 'address', indexed: true },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'AutomationResumed',
+    inputs: [
+      { name: 'automationHash', type: 'bytes32', indexed: true },
+      { name: 'safe', type: 'address', indexed: true },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'AutomationDeleted',
+    inputs: [
+      { name: 'automationHash', type: 'bytes32', indexed: true },
+      { name: 'safe', type: 'address', indexed: true },
+    ],
+    anonymous: false,
+  },
+  {
+    type: 'event',
+    name: 'ExecutionSuccess',
+    inputs: [
+      { name: 'automationHash', type: 'bytes32', indexed: true },
+      { name: 'safe', type: 'address', indexed: true },
+      { name: 'executionCount', type: 'uint48', indexed: false },
+    ],
+    anonymous: false,
+  },
+] as const;
+
+export const recurrentStrategyAbi = [
+  {
+    type: 'function',
+    name: 'decodeSchedule',
+    stateMutability: 'pure',
+    inputs: [{ name: 'trigger', type: 'bytes' }],
+    outputs: [
+      {
+        type: 'tuple',
+        components: [
+          { name: 'hour', type: 'uint8' },
+          { name: 'minute', type: 'uint8' },
+          { name: 'dayOfWeek', type: 'uint8' },
+          { name: 'dayOfMonth', type: 'uint8' },
+          { name: 'month', type: 'uint8' },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'function',
+    name: 'canExecute',
+    stateMutability: 'view',
+    inputs: [
+      { type: 'bytes32' },
+      { type: 'address' },
+      { name: 'lastExecuted', type: 'uint40' },
+      { type: 'uint48' },
+      { type: 'bytes' },
+      { name: 'trigger', type: 'bytes' },
+    ],
+    outputs: [{ type: 'bool' }],
+  },
+] as const;
