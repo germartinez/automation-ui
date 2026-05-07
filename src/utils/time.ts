@@ -1,15 +1,15 @@
-export function formatDateTime(date: Date, tz?: string): string {
+export function formatDateTime(date: Date, timeZone?: string): string {
   const datePart = date.toLocaleString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-    timeZone: tz,
+    timeZone,
   });
   const timePart = date.toLocaleString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
-    timeZone: tz,
+    timeZone,
   });
   return `${datePart} · ${timePart}`;
 }
