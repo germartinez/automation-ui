@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '@/config/env';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import type { AppKitNetwork } from '@reown/appkit-common';
 import { sepolia } from '@reown/appkit/networks';
@@ -16,18 +17,16 @@ const queryClient = new QueryClient({
   },
 });
 
-const projectId = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID ?? 'YOUR_PROJECT_ID';
-
 const networks: [AppKitNetwork, ...AppKitNetwork[]] = [sepolia as AppKitNetwork];
 
 const wagmiAdapter = new WagmiAdapter({
-  projectId,
+  projectId: env.reownProjectId,
   networks,
 });
 
 createAppKit({
   adapters: [wagmiAdapter],
-  projectId,
+  projectId: env.reownProjectId,
   networks,
   defaultNetwork: sepolia,
   enableWalletConnect: true,

@@ -1,5 +1,9 @@
 import type { Address } from 'viem';
 import { sepolia } from 'viem/chains';
+import { env } from './env';
+
+const automationModuleAddressSepolia = env.automationModuleAddressSepolia as Address;
+const recurrentStrategyAddressSepolia = env.recurrentStrategyAddressSepolia as Address;
 
 type Deployment = {
   automationModule: Address;
@@ -8,8 +12,8 @@ type Deployment = {
 
 const DEPLOYMENTS: Record<number, Deployment> = {
   [sepolia.id]: {
-    automationModule: '',
-    recurrentStrategy: '',
+    automationModule: automationModuleAddressSepolia,
+    recurrentStrategy: recurrentStrategyAddressSepolia,
   },
 };
 

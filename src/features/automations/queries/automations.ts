@@ -1,3 +1,4 @@
+import { env } from '@/config/env';
 import { Hex, type Address } from 'viem';
 
 export type Automation = {
@@ -18,12 +19,10 @@ export type Automation = {
   executionCount: number;
 };
 
-const SERVICE_URL = process.env.NEXT_PUBLIC_AUTOMATION_SERVICE_URL ?? 'http://localhost:3001';
-
 export async function fetchAutomations(safe?: Address): Promise<Automation[]> {
   if (!safe) return [];
   try {
-    const res = await fetch(`${SERVICE_URL}/automations?safe=${safe.toLowerCase()}`);
+    const res = await fetch(`${env.automationServiceUrl}/automations?safe=${safe.toLowerCase()}`);
     if (!res.ok) return [];
     const body = (await res.json()) as { automations: Automation[] };
     return body.automations;
@@ -36,7 +35,7 @@ export async function fetchAutomations(safe?: Address): Promise<Automation[]> {
 export async function fetchAutomation(automationHash?: Hex): Promise<Automation | undefined> {
   if (!automationHash) return;
   try {
-    const res = await fetch(`${SERVICE_URL}/automations/${automationHash}`);
+    const res = await fetch(`${env.automationServiceUrl}/automations/${automationHash}`);
     if (!res.ok) return;
     const body = await res.json();
     return body;
