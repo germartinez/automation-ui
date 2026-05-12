@@ -5,7 +5,7 @@ import { cn } from '@/utils';
 import { useAppKit, useAppKitAccount, useDisconnect } from '@reown/appkit/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import AddressDisplay from '../ui/address';
+import HexDisplay from '../ui/hex-display';
 
 const links: { id: string; label: string }[] = [];
 
@@ -43,8 +43,8 @@ function Nav({ className }: { className?: string }) {
         </div>
         {address ? (
           <div className="flex items-center gap-4">
-            <AddressDisplay address={address} />
-            <Button variant="primary" onClick={disconnect}>
+            <HexDisplay hex={address} />
+            <Button variant="secondary" onClick={disconnect}>
               Log out
             </Button>
           </div>

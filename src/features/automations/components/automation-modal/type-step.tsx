@@ -76,7 +76,7 @@ export default function WhenTypeFields({
                 active
                   ? 'bg-(--accent-subtle) border border-(--accent-subtle)'
                   : 'border border-(--border-light)',
-                option.disabled && 'opacity-50 cursor-not-allowed',
+                option.disabled && 'cursor-auto opacity-50',
               )}
             >
               <span
@@ -90,7 +90,7 @@ export default function WhenTypeFields({
                 <p className="text-(--text-sec) text-sm">{option.description}</p>
               </div>
               {option.disabled && (
-                <span className="text-xs text-(--text-ter) ml-auto">Coming soon</span>
+                <span className="text-xs text-(--text-sec) ml-auto">Coming soon</span>
               )}
             </button>
           );

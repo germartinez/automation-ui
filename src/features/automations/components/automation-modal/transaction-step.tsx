@@ -18,7 +18,6 @@ export default function TransactionFields({ draft, onChange }: TransactionFields
           value={draft.target}
           onChange={(value) => onChange({ ...draft, target: String(value) })}
           placeholder="0x..."
-          mono
         />
       </div>
       <div className="grid gap-1.5">
@@ -35,7 +34,6 @@ export default function TransactionFields({ draft, onChange }: TransactionFields
           value={draft.data}
           onChange={(value) => onChange({ ...draft, data: String(value) })}
           placeholder="0x"
-          mono
         />
         <p className="text-md text-(--text-ter)">
           Leave blank for plain ETH transfer. Hex calldata is locked at creation.

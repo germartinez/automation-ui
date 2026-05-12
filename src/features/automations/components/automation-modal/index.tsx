@@ -143,7 +143,7 @@ export default function ScheduleAutomationModal({
                 {feedback && <StatusBanner state={feedback.kind} message={feedback.message} />}
                 <div className="flex items-center justify-between gap-3">
                   <Button
-                    variant="secondary"
+                    variant="primary"
                     disabled={isFirstStep || submitting}
                     onClick={() => setActiveStep(Math.max(0, activeStep - 1))}
                     className="w-full"
