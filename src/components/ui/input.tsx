@@ -10,7 +10,6 @@ type InputProps = {
   onChange: (value: string | number) => void;
   placeholder?: string;
   style?: React.CSSProperties;
-  mono?: boolean;
   prefix?: string;
   className?: string;
 };
@@ -23,7 +22,6 @@ function Input({
   onChange,
   placeholder,
   style,
-  mono,
   prefix,
   className,
 }: InputProps) {
@@ -41,7 +39,6 @@ function Input({
         placeholder={placeholder}
         className={cn(
           'w-full border border-(--border) p-3 rounded-lg bg-(--surface) text-(--text) transition-colors duration-150 focus:border-accent',
-          mono ? 'font-mono' : '',
           prefix ? 'pl-7' : '',
         )}
         style={style}

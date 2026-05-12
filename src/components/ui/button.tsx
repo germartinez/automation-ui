@@ -46,6 +46,7 @@ function Button({
         variantClass,
         sizeClass,
         className,
+        disabled && 'bg-(--bg-muted) text-(--text-muted) hover:bg-(--bg-muted) cursor-auto',
       )}
     >
       {children}
