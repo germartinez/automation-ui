@@ -19,16 +19,16 @@ export type Automation = {
   executionCount: number;
 };
 
-export async function fetchAutomations(safe?: Address): Promise<Automation[]> {
-  if (!safe) return [];
+export async function fetchAutomations(safe?: Address): Promise<Automation[] | undefined> {
+  if (!safe) return;
   try {
     const res = await fetch(`${env.automationServiceUrl}/automations?safe=${safe.toLowerCase()}`);
-    if (!res.ok) return [];
+    if (!res.ok) return;
     const body = (await res.json()) as { automations: Automation[] };
     return body.automations;
   } catch (error) {
     console.error(error);
-    return [];
+    return;
   }
 }
 

@@ -9,10 +9,15 @@ export type Execution = {
   executionCount: number;
 };
 
-export async function fetchExecutions(hash: Hex): Promise<Execution[]> {
-  if (!hash) return [];
-  const res = await fetch(`${env.automationServiceUrl}/automations/${hash}/executions`);
-  if (!res.ok) return [];
-  const body = (await res.json()) as { executions: Execution[] };
-  return body.executions ?? [];
+export async function fetchExecutions(hash: Hex): Promise<Execution[] | undefined> {
+  if (!hash) return;
+  try {
+    const res = await fetch(`${env.automationServiceUrl}/automations/${hash}/executions`);
+    if (!res.ok) return;
+    const body = (await res.json()) as { executions: Execution[] };
+    return body.executions;
+  } catch (error) {
+    console.error(error);
+    return;
+  }
 }
