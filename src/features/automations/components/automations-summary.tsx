@@ -8,10 +8,6 @@ import { useBalance } from 'wagmi';
 import { useAutomations } from '../hooks/use-automations';
 import { nextRunFor } from '../utils/describe-trigger';
 
-type AutomationsSummaryProps = {
-  safe?: Address;
-};
-
 function formatCountdown(ms: number): string {
   if (ms <= 0) return '00:00';
   const totalSeconds = Math.floor(ms / 1_000);
@@ -45,6 +41,50 @@ function useTick(intervalMs: number) {
     return () => clearInterval(id);
   }, [intervalMs]);
 }
+
+type TileProps = {
+  label: string;
+  value: string;
+  unit?: string;
+  highlight?: boolean;
+};
+
+function Tile({ label, value, unit, highlight }: TileProps) {
+  return (
+    <div
+      className={cn(
+        'rounded-xl border p-4 flex flex-col',
+        highlight ? 'bg-(--accent-subtle) border-transparent' : 'bg-(--surface) border-(--border)',
+      )}
+    >
+      <span
+        className={cn(
+          'text-xs uppercase font-semibold',
+          highlight ? 'text-(--accent-text)' : 'text-(--text-ter)',
+        )}
+      >
+        {label}
+      </span>
+      <div
+        className={cn(
+          'flex items-baseline gap-2 tabular-nums',
+          highlight ? 'text-(--accent-text)' : 'text-(--text)',
+        )}
+      >
+        <span className="text-2xl font-semibold">{value}</span>
+        {unit && (
+          <span className={cn(highlight ? 'text-(--accent-text)' : 'text-(--text-sec)')}>
+            {unit}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+type AutomationsSummaryProps = {
+  safe?: Address;
+};
 
 export default function AutomationsSummary({ safe }: AutomationsSummaryProps) {
   const { data: automations, isLoading } = useAutomations(safe);
@@ -93,51 +133,6 @@ export default function AutomationsSummary({ safe }: AutomationsSummaryProps) {
       <Tile label="Active automations" value={String(activeCount)} unit={`/ ${totalCount} total`} />
       <Tile label="Total executions" value={String(totalExecutions)} unit="runs" />
       <Tile label="Wallet balance" value={balanceEth ?? '—'} unit={balance?.symbol} />
-    </div>
-  );
-}
-
-type TileProps = {
-  label: string;
-  value: string;
-  unit?: string;
-  highlight?: boolean;
-};
-
-function Tile({ label, value, unit, highlight }: TileProps) {
-  return (
-    <div
-      className={cn(
-        'rounded-xl border p-4 flex flex-col',
-        highlight ? 'bg-(--accent-subtle) border-transparent' : 'bg-(--surface) border-(--border)',
-      )}
-    >
-      <span
-        className={cn(
-          'text-[11px] tracking-wider uppercase font-semibold',
-          highlight ? 'text-(--accent-text)' : 'text-(--text-ter)',
-        )}
-      >
-        {label}
-      </span>
-      <div
-        className={cn(
-          'flex items-baseline gap-2 tabular-nums font-semibold text-2xl',
-          highlight ? 'text-(--accent-text)' : 'text-(--text)',
-        )}
-      >
-        {value}
-        {unit && (
-          <span
-            className={cn(
-              'text-[13px] font-medium',
-              highlight ? 'text-(--accent-text)' : 'text-(--text-sec)',
-            )}
-          >
-            {unit}
-          </span>
-        )}
-      </div>
     </div>
   );
 }

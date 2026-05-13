@@ -1,6 +1,7 @@
 'use client';
 
 import Badge from '@/components/ui/badge';
+import HexDisplay from '@/components/ui/hex-display';
 import { useTimezone } from '@/context/TimezoneProvider';
 import type { Automation as AutomationRecord } from '@/features/automations/queries/automations';
 import { cn } from '@/utils';
@@ -59,16 +60,16 @@ export default function AutomationRow({ automation, onMore }: AutomationRowProps
         <div className="flex flex-col gap-0.5 truncate">
           <span className="text-sm text-(--text) font-medium truncate">something.eth</span>
           <span className="text-xs text-(--text-ter) truncate">
-            {to.slice(0, 8)}...{to.slice(-6)}
+            <HexDisplay hex={to} />
           </span>
         </div>
       </div>
 
-      <div className="flex font-md truncate">
-        <div className={cn('text-sm', value > 0n ? 'text-(--error-text)' : 'text-(--text-ter)')}>
-          {value > 0n ? '-' : ''}
-          {formatEther(value)} ETH
-        </div>
+      <div
+        className={cn('truncate text-sm', value > 0n ? 'text-(--error-text)' : 'text-(--text-ter)')}
+      >
+        {value > 0n ? '-' : ''}
+        {formatEther(value)} ETH
       </div>
 
       <div className="flex flex-col gap-0.5">
