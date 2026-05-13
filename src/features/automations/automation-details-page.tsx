@@ -1,7 +1,6 @@
 'use client';
 
 import Card from '@/components/ui/card';
-import AutomationCard from '@/features/automations/components/automation-card';
 import { useAutomation } from '@/features/automations/hooks/use-automation';
 import { ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -14,18 +13,14 @@ export default function AutomationDetailsPage({ hash }: Props) {
   const { data: automation, isLoading } = useAutomation(hash);
 
   return (
-    <div className="max-w-6xl mx-auto w-full px-4 pt-10 pb-20">
+    <div className="max-w-6xl mx-auto w-full px-4 pt-8 pb-20 flex flex-col gap-6">
       <Link
         href="/"
-        className="inline-flex items-center gap-1.5 text-sm text-(--text-sec) hover:text-(--text) mb-4"
+        className="inline-flex items-center gap-1.5 text-sm text-(--text-sec) hover:text-(--text)"
       >
         <ArrowLeftIcon size={14} />
         Back to automations
       </Link>
-
-      <h2 className="text-2xl font-semibold text-(--text) my-4">
-        {automation?.title ?? 'Automation Details'}
-      </h2>
 
       {isLoading ? (
         <Card>
@@ -39,10 +34,9 @@ export default function AutomationDetailsPage({ hash }: Props) {
         </Card>
       ) : (
         <>
-          <Card className="p-0 overflow-hidden">
-            <AutomationCard automation={automation} />
-          </Card>
-          <h2 className="text-2xl font-semibold text-(--text) my-4">Executions</h2>
+          <h1 className="text-2xl font-semibold text-(--text)">
+            {automation.title ?? 'Untitled automation'}
+          </h1>
           <ExecutionsTable automation={automation} />
         </>
       )}

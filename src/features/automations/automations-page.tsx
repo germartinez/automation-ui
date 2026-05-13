@@ -37,7 +37,7 @@ function AutomationsPage() {
       <div className="grid gap-6">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-semibold text-(--text)">Automations</h2>
+            <h1 className="text-2xl font-semibold text-(--text)">Automations</h1>
             <p className="text-sm text-(--text-sec) mt-1">
               Recurring on-chain transactions for this wallet
             </p>

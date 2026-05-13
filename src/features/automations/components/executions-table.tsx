@@ -1,58 +1,68 @@
 'use client';
 
 import Table from '@/components/ui/table';
+import Tabs from '@/components/ui/tabs';
 import { useExecutions } from '@/features/automations/hooks/use-executions';
 import type { Automation } from '@/features/automations/queries/automations';
-import {
-  decodeRecurrentTrigger,
-  isValidRecurrentSchedule,
-  nextOccurrenceUtc,
-} from '@/lib/recurrent';
+import { cn } from '@/utils';
+import { useMemo, useState } from 'react';
 import type { Hex } from 'viem';
 import ExecutionRow from './execution-row';
-import PendingExecutionRow from './execution-row-pending';
 
-function nextRunFor(automation: Automation): Date | undefined {
-  if (!automation.isActive) return;
-  try {
-    const schedule = decodeRecurrentTrigger(automation.trigger as Hex);
-    if (!isValidRecurrentSchedule(schedule)) return;
-    return nextOccurrenceUtc(schedule);
-  } catch {
-    return;
-  }
-}
+const TABS = ['All', 'Executed', 'Failed'];
+
+const GRID_COLS = 'grid-cols-[60px_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_150px]';
 
 type Props = { automation: Automation };
 
 export default function ExecutionsTable({ automation }: Props) {
   const { data: executions = [], isLoading } = useExecutions(automation.automationHash as Hex);
-  const nextRun = nextRunFor(automation);
+  const [tab, setTab] = useState(0);
+
+  const counts = useMemo(() => {
+    if (!executions) return [0, 0, 0];
+    return [executions.length, executions.length, 0];
+  }, [executions]);
+
+  const filteredExecutions = useMemo(() => {
+    return executions?.filter((e) => {
+      if (tab === 2) return false; // TODO: add failed/missed executions
+      return true;
+    });
+  }, [executions, tab]);
 
   return (
-    <Table>
-      <table className="w-full text-md">
-        <thead className="bg-(--surface-alt)">
-          <tr className="text-left text-(--text-ter) text-xs uppercase">
-            <th className="p-4">#</th>
-            <th className="p-4">Transaction</th>
-            <th className="p-4">Time</th>
-            <th className="p-4">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {nextRun && <PendingExecutionRow nextRun={nextRun} index={executions.length + 1} />}
+    <div className="flex flex-col gap-2">
+      <Tabs tabs={TABS} activeTab={tab} onTabChange={setTab} counts={counts} />
+      <Table>
+        {filteredExecutions?.length > 0 && (
+          <div
+            className={cn(
+              'grid items-center gap-4 px-4 py-2  bg-(--surface-alt) text-xs font-semibold uppercase text-(--text-ter) border-b border-(--border)',
+              GRID_COLS,
+            )}
+          >
+            <span>#</span>
+            <span>Hash</span>
+            <span>Time</span>
+            <span>Fee</span>
+            <span>Status</span>
+          </div>
+        )}
+        <div className="divide-y divide-(--border) bg-(--surface)">
           {isLoading ? (
-            <tr>
-              <td colSpan={4} className="p-4 text-center text-sm text-(--text-sec)">
-                Loading...
-              </td>
-            </tr>
+            <p className="px-4 py-8 text-center text-sm text-(--text-sec)">Loading...</p>
+          ) : !filteredExecutions || filteredExecutions.length === 0 ? (
+            <p className="px-4 py-8 text-center text-sm text-(--text-sec)">
+              {tab === 0 ? 'No executions yet.' : 'No executions match your filters'}
+            </p>
           ) : (
-            executions.map((e) => <ExecutionRow key={e.txHash} execution={e} />)
+            filteredExecutions.map((execution) => (
+              <ExecutionRow key={execution.txHash} execution={execution} gridCols={GRID_COLS} />
+            ))
           )}
-        </tbody>
-      </table>
-    </Table>
+        </div>
+      </Table>
+    </div>
   );
 }

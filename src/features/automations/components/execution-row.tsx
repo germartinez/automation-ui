@@ -1,41 +1,49 @@
 'use client';
 
-import StatusBadge from '@/components/ui/status-badge';
+import Badge from '@/components/ui/badge';
+import HexDisplay from '@/components/ui/hex-display';
 import { useTimezone } from '@/context/TimezoneProvider';
 import type { Execution } from '@/features/automations/queries/executions';
-import { explorerTx } from '@/utils/explorer';
+import { cn } from '@/utils';
 import { formatDateTime, timeAgo } from '@/utils/time';
-import { ExternalLinkIcon } from 'lucide-react';
+import { formatEther } from 'viem';
 
-type Props = { execution: Execution };
+type Props = { execution: Execution; gridCols: string };
 
-export default function ExecutionRow({ execution }: Props) {
+export default function ExecutionRow({ execution, gridCols }: Props) {
   const { timeZone } = useTimezone();
   const date = execution.timestamp ? new Date(execution.timestamp * 1000) : undefined;
 
+  const gasUsed = 1000_000_000_000n; // TODO: get gas used from execution
+
   return (
-    <tr className="border-t border-(--border)">
-      <td className="p-4 text-(--text-sec) w-1/6">{execution.executionCount}</td>
-      <td className="p-4 text-md w-2/6">
-        <a
-          href={explorerTx(execution.txHash)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-(--text) hover:text-(--accent)"
-        >
-          {execution.txHash.slice(0, 10)}...{execution.txHash.slice(-4)}
-          <ExternalLinkIcon size={12} />
-        </a>
-      </td>
-      <td className="p-4 text-(--text) w-2/6">
-        <div className="flex flex-col">
-          <span>{date && formatDateTime(date, timeZone)}</span>
-          <span className="text-xs text-(--text-sec)">{date && timeAgo(date)}</span>
-        </div>
-      </td>
-      <td className="p-4 text-(--text) w-1/6">
-        <StatusBadge status="success" />
-      </td>
-    </tr>
+    <div className={cn('grid items-center gap-4 p-4 group', gridCols)}>
+      <span className="text-md text-(--text-ter) tabular-nums">{execution.executionCount}</span>
+
+      <div className="truncate">
+        <HexDisplay hex={execution.txHash} />
+      </div>
+
+      <div className="flex flex-col gap-0.5">
+        <span className="text-sm text-(--text) truncate">
+          {date && formatDateTime(date, timeZone)}
+        </span>
+        <span className="text-xs text-(--text-ter) truncate">{date && timeAgo(date)}</span>
+      </div>
+
+      <div
+        className={cn(
+          'truncate text-md',
+          gasUsed > 0n ? 'text-(--error-text)' : 'text-(--text-ter)',
+        )}
+      >
+        {gasUsed > 0n ? '-' : ''}
+        {formatEther(gasUsed)} ETH
+      </div>
+
+      <div className="flex justify-start">
+        <Badge dot label="Executed" status="success" />
+      </div>
+    </div>
   );
 }
