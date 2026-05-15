@@ -1,11 +1,12 @@
 'use client';
 
-import Card from '@/components/ui/card';
 import { useAutomation } from '@/features/automations/hooks/use-automation';
 import { ArrowLeftIcon } from 'lucide-react';
 import Link from 'next/link';
 import { type Hex } from 'viem';
 import ExecutionsTable from './components/executions-table';
+import NextRunCard from './components/next-run-card';
+import TransactionCard from './components/transaction-card';
 
 type Props = { hash: Hex };
 
@@ -22,21 +23,15 @@ export default function AutomationDetailsPage({ hash }: Props) {
         Back to automations
       </Link>
 
-      {isLoading ? (
-        <Card>
-          <p className="flex items-center justify-center text-(--text-sec)">Loading...</p>
-        </Card>
-      ) : !automation ? (
-        <Card>
-          <p className="flex items-center justify-center text-(--text-sec)">
-            Automation not found.
-          </p>
-        </Card>
-      ) : (
+      {automation && (
         <>
           <h1 className="text-2xl font-semibold text-(--text)">
             {automation.title ?? 'Untitled automation'}
           </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <NextRunCard isActive={automation.isActive} trigger={automation.trigger as Hex} />
+            <TransactionCard automation={automation} />
+          </div>
           <ExecutionsTable automation={automation} />
         </>
       )}

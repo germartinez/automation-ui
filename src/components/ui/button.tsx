@@ -31,9 +31,9 @@ function Button({
   }[variant];
 
   const sizeClass = {
-    sm: 'text-xs px-2.5 py-[5px]',
-    md: 'text-[13px] px-3.5 py-[7px]',
-    lg: 'text-[15px] px-5 py-[11px]',
+    sm: 'text-xs py-2 px-4',
+    md: 'text-sm py-3 px-5',
+    lg: 'text-md py-5 px-7',
   }[size];
 
   return (

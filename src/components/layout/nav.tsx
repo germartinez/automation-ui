@@ -1,11 +1,11 @@
 'use client';
 
 import Button from '@/components/ui/button';
+import HexDisplay from '@/components/ui/hex-display';
 import { cn } from '@/utils';
 import { useAppKit, useAppKitAccount, useDisconnect } from '@reown/appkit/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import HexDisplay from '../ui/hex-display';
 
 const links: { id: string; label: string }[] = [];
 
@@ -43,8 +43,8 @@ function Nav({ className }: { className?: string }) {
         </div>
         {address ? (
           <div className="flex items-center gap-4">
-            <HexDisplay hex={address} className="text-sm text-(--text-sec)" />
-            <Button variant="secondary" onClick={disconnect}>
+            <HexDisplay hex={address} badge identicon />
+            <Button variant="secondary" onClick={disconnect} size="sm">
               Log out
             </Button>
           </div>

@@ -161,6 +161,23 @@ export function nextOccurrenceUtc(s: RecurrentSchedule, from: Date = new Date())
   return;
 }
 
+export function expectedOccurrencesBetween(
+  s: RecurrentSchedule,
+  fromSec: number,
+  toSec: number,
+): Date[] {
+  const result: Date[] = [];
+  let cursor = new Date(fromSec * 1000 - 60_000);
+  const endMs = toSec * 1000;
+  while (true) {
+    const next = nextOccurrenceUtc(s, cursor);
+    if (!next || next.getTime() > endMs) break;
+    result.push(next);
+    cursor = next;
+  }
+  return result;
+}
+
 export type Frequency = 'hourly' | 'daily' | 'weekly' | 'monthly';
 
 export type RecurrentBuilderState =

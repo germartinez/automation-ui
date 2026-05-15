@@ -8,7 +8,7 @@ type IdenticonProps = {
   size?: number;
 };
 
-export default function Identicon({ address, size = 32 }: IdenticonProps) {
+export default function Identicon({ address, size = 28 }: IdenticonProps) {
   const src = useMemo(() => (address ? makeBlockie(address) : undefined), [address]);
 
   if (!src) {

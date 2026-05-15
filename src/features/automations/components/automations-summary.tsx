@@ -1,12 +1,12 @@
 'use client';
 
 import { useTimezone } from '@/context/TimezoneProvider';
+import { useAutomations } from '@/features/automations/hooks/use-automations';
+import { nextRunFor } from '@/features/automations/utils/describe-trigger';
 import { cn } from '@/utils';
 import { useEffect, useMemo, useState } from 'react';
 import { type Address, type Hex, formatEther } from 'viem';
 import { useBalance } from 'wagmi';
-import { useAutomations } from '../hooks/use-automations';
-import { nextRunFor } from '../utils/describe-trigger';
 
 function formatCountdown(ms: number): string {
   if (ms <= 0) return '00:00';

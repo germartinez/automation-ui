@@ -3,17 +3,18 @@
 import Badge from '@/components/ui/badge';
 import HexDisplay from '@/components/ui/hex-display';
 import { useTimezone } from '@/context/TimezoneProvider';
+import { useLiveNextRun } from '@/features/automations/hooks/use-live-next-run';
 import type { Automation as AutomationRecord } from '@/features/automations/queries/automations';
+import { decodeTriggerSchedule, shortCadence } from '@/features/automations/utils/describe-trigger';
 import { cn } from '@/utils';
 import { timeUntil } from '@/utils/time';
 import { MoreHorizontalIcon } from 'lucide-react';
 import { type Hex, formatEther } from 'viem';
-import Identicon from '../../../components/ui/identicon';
-import { decodeTriggerSchedule, nextRunFor, shortCadence } from '../utils/describe-trigger';
 import AutomationIcon from './automation-icon';
 
 type AutomationRowProps = {
   automation: AutomationRecord;
+  gridCols: string;
   onMore?: (hash: string) => void;
 };
 
@@ -30,38 +31,27 @@ function formatWhen(date: Date, timeZone?: string): string {
   });
 }
 
-export default function AutomationRow({ automation, onMore }: AutomationRowProps) {
+export default function AutomationRow({ automation, gridCols, onMore }: AutomationRowProps) {
   const { title, trigger, value, to, isActive } = automation;
   const { timeZone } = useTimezone();
 
   const schedule = decodeTriggerSchedule(trigger as Hex);
   const cadenceLine = schedule ? shortCadence(schedule, timeZone) : 'Custom';
-  const next = nextRunFor(trigger as Hex, isActive);
+  const next = useLiveNextRun(trigger as Hex, isActive);
   const soon = next ? next.getTime() - Date.now() < SOON_THRESHOLD_MS : false;
 
   const avatarTone = !isActive ? 'muted' : soon ? 'warn' : 'accent';
 
   return (
-    <div
-      className={cn(
-        'grid grid-cols-[44px_minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,0.6fr)_minmax(0,1fr)_90px_28px] items-center gap-4 p-4 group',
-        !isActive && 'opacity-80',
-      )}
-    >
+    <div className={cn('grid items-center gap-4 p-4 group', gridCols, !isActive && 'opacity-80')}>
       <AutomationIcon kind="recurrent" tone={avatarTone} />
 
       <div className="flex flex-col gap-0.5">
-        <p className="font-semibold text-(--text) text-md truncate">{title ?? 'Untitled'}</p>
+        <p className="font-medium text-(--text) text-md truncate">{title ?? 'Untitled'}</p>
         <p className="text-xs text-(--text-ter) truncate">{cadenceLine}</p>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Identicon address={to} />
-        <div className="flex flex-col gap-0.5 truncate">
-          <span className="text-sm text-(--text) font-medium truncate">something.eth</span>
-          <HexDisplay hex={to} className="text-xs text-(--text-ter) truncate" />
-        </div>
-      </div>
+      <HexDisplay hex={to} identicon label="recipient.eth" />
 
       <div
         className={cn('truncate text-sm', value > 0n ? 'text-(--error-text)' : 'text-(--text-ter)')}

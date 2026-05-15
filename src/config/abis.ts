@@ -169,6 +169,21 @@ export const automationModuleAbi = [
     ],
     anonymous: false,
   },
+  { type: 'error', name: 'NotAutomationOwner', inputs: [] },
+  { type: 'error', name: 'AutomationNotActive', inputs: [] },
+  { type: 'error', name: 'AutomationNotFound', inputs: [] },
+  { type: 'error', name: 'AutomationAlreadyExists', inputs: [] },
+  { type: 'error', name: 'AutomationModuleNotEnabled', inputs: [] },
+  { type: 'error', name: 'AlreadyInState', inputs: [] },
+  { type: 'error', name: 'StrategyDenied', inputs: [] },
+  { type: 'error', name: 'InvalidAutomationHash', inputs: [] },
+  { type: 'error', name: 'InvalidAutomationStrategy', inputs: [] },
+  { type: 'error', name: 'InvalidTarget', inputs: [] },
+  { type: 'error', name: 'LockEngaged', inputs: [] },
+  { type: 'error', name: 'DoubleExecution', inputs: [] },
+  { type: 'error', name: 'AutomatedExecutionFailed', inputs: [] },
+  { type: 'error', name: 'TooManyAutomations', inputs: [] },
+  { type: 'error', name: 'InsufficientCreationFee', inputs: [] },
 ] as const;
 
 export const recurrentStrategyAbi = [

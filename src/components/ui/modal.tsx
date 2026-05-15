@@ -23,7 +23,7 @@ function Modal({ open, onClose, children }: ModalProps) {
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open) return;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">

@@ -22,7 +22,9 @@ export type Automation = {
 export async function fetchAutomations(safe?: Address): Promise<Automation[] | undefined> {
   if (!safe) return;
   try {
-    const res = await fetch(`${env.automationServiceUrl}/automations?safe=${safe.toLowerCase()}`);
+    const res = await fetch(
+      `${env.automationServiceUrl}/api/v1/automations?safe=${safe.toLowerCase()}`,
+    );
     if (!res.ok) return;
     const body = (await res.json()) as { automations: Automation[] };
     return body.automations;
@@ -35,7 +37,7 @@ export async function fetchAutomations(safe?: Address): Promise<Automation[] | u
 export async function fetchAutomation(automationHash?: Hex): Promise<Automation | undefined> {
   if (!automationHash) return;
   try {
-    const res = await fetch(`${env.automationServiceUrl}/automations/${automationHash}`);
+    const res = await fetch(`${env.automationServiceUrl}/api/v1/automations/${automationHash}`);
     if (!res.ok) return;
     const body = await res.json();
     return body;
