@@ -59,9 +59,7 @@ export default function AutomationRow({ automation, onMore }: AutomationRowProps
         <Identicon address={to} />
         <div className="flex flex-col gap-0.5 truncate">
           <span className="text-sm text-(--text) font-medium truncate">something.eth</span>
-          <span className="text-xs text-(--text-ter) truncate">
-            <HexDisplay hex={to} />
-          </span>
+          <HexDisplay hex={to} className="text-xs text-(--text-ter) truncate" />
         </div>
       </div>
 

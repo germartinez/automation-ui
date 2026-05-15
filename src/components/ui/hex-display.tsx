@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/utils';
 import { explorerAddress, explorerTx } from '@/utils/explorer';
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -8,9 +9,10 @@ import { isAddress } from 'viem';
 type HexDisplayProps = {
   hex: string;
   full?: boolean;
+  className?: string;
 };
 
-function HexDisplay({ hex, full = false }: HexDisplayProps) {
+function HexDisplay({ hex, full = false, className }: HexDisplayProps) {
   const [copied, setCopied] = useState(false);
   const isEthAddress = isAddress(hex);
   const hexString = isEthAddress
@@ -24,31 +26,28 @@ function HexDisplay({ hex, full = false }: HexDisplayProps) {
   };
 
   return (
-    <span className="flex items-center gap-1">
-      {full ? (
-        <span className="text-sm truncate">{hex}</span>
-      ) : (
-        <span className="text-sm text-(--text-sec) truncate">{hexString}</span>
-      )}
+    <span className={cn('inline-flex items-center gap-1', className)}>
+      <span className="truncate">{full ? hex : hexString}</span>
       <button
+        type="button"
         onClick={copy}
-        className="text-(--text-ter) hover:text-(--text) m-0 p-0 border-none rounded-none"
+        className="shrink-0 text-(--text-ter) hover:text-(--text)"
         aria-label={`Copy ${isEthAddress ? 'address' : 'hash'}`}
       >
         {copied ? (
-          <CheckIcon size={12} color={`var(--text-ter)`} />
+          <CheckIcon size={12} className="text-(--text-ter) hover:text-(--text-sec)" />
         ) : (
-          <CopyIcon size={12} color={`var(--text-ter)`} />
+          <CopyIcon size={12} className="text-(--text-ter) hover:text-(--text-sec)" />
         )}
       </button>
       <a
         href={isEthAddress ? explorerAddress(hex) : explorerTx(hex)}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-(--text-ter) hover:text-(--text) shrink-0"
+        className="shrink-0 text-(--text-ter) hover:text-(--text-sec)"
         aria-label="Open in explorer"
       >
-        <ExternalLinkIcon size={12} color={`var(--text-ter)`} />
+        <ExternalLinkIcon size={12} />
       </a>
     </span>
   );

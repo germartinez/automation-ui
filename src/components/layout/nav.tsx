@@ -43,7 +43,7 @@ function Nav({ className }: { className?: string }) {
         </div>
         {address ? (
           <div className="flex items-center gap-4">
-            <HexDisplay hex={address} />
+            <HexDisplay hex={address} className="text-sm text-(--text-sec)" />
             <Button variant="secondary" onClick={disconnect}>
               Log out
             </Button>

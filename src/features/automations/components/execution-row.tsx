@@ -20,9 +20,7 @@ export default function ExecutionRow({ execution, gridCols }: Props) {
     <div className={cn('grid items-center gap-4 p-4 group', gridCols)}>
       <span className="text-md text-(--text-ter) tabular-nums">{execution.executionCount}</span>
 
-      <div className="truncate">
-        <HexDisplay hex={execution.txHash} />
-      </div>
+      <HexDisplay hex={execution.txHash} className="text-md text-(--text)" />
 
       <div className="flex flex-col gap-0.5">
         <span className="text-sm text-(--text) truncate">
