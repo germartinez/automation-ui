@@ -1,6 +1,7 @@
 'use client';
 
 import Button from '@/components/ui/button';
+import ChainSelector from '@/components/ui/chain-selector';
 import HexDisplay from '@/components/ui/hex-display';
 import { cn } from '@/utils';
 import { useAppKit, useAppKitAccount, useDisconnect } from '@reown/appkit/react';
@@ -42,14 +43,15 @@ function Nav({ className }: { className?: string }) {
           </div>
         </div>
         {address ? (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <HexDisplay hex={address} badge identicon />
+            <ChainSelector />
             <Button variant="secondary" onClick={disconnect} size="sm">
               Log out
             </Button>
           </div>
         ) : (
-          <Button variant="primary" onClick={() => open()}>
+          <Button variant="primary" onClick={() => open()} size="sm">
             Connect
           </Button>
         )}

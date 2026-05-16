@@ -4,13 +4,14 @@ import { fetchAccountVersion } from '@/queries/account-version';
 import { queryKeys } from '@/queries/keys';
 import { useQuery } from '@tanstack/react-query';
 import { type Address, isAddress } from 'viem';
-import { usePublicClient } from 'wagmi';
+import { useChainId, usePublicClient } from 'wagmi';
 
 export function useAccountVersion(address?: Address) {
-  const publicClient = usePublicClient();
+  const chainId = useChainId();
+  const publicClient = usePublicClient({ chainId });
   const enabled = Boolean(address && isAddress(address) && publicClient);
   return useQuery({
-    queryKey: queryKeys.accountVersion(address),
+    queryKey: queryKeys.accountVersion(address, chainId),
     queryFn: () => fetchAccountVersion(publicClient!, address!),
     enabled,
   });

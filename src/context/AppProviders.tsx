@@ -3,7 +3,7 @@
 import { env } from '@/config/env';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import type { AppKitNetwork } from '@reown/appkit-common';
-import { sepolia } from '@reown/appkit/networks';
+import { baseSepolia, gnosisChiado, sepolia } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
@@ -18,7 +18,11 @@ const queryClient = new QueryClient({
   },
 });
 
-const networks: [AppKitNetwork, ...AppKitNetwork[]] = [sepolia as AppKitNetwork];
+export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [
+  sepolia as AppKitNetwork,
+  gnosisChiado as AppKitNetwork,
+  baseSepolia as AppKitNetwork,
+];
 
 const wagmiAdapter = new WagmiAdapter({
   projectId: env.reownProjectId,
