@@ -8,10 +8,11 @@ import {
 import { queryKeys } from '@/queries/keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { usePublicClient, useWriteContract } from 'wagmi';
+import { useChainId, usePublicClient, useWriteContract } from 'wagmi';
 
 export function useCreateAutomation() {
   const publicClient = usePublicClient();
+  const chainId = useChainId();
   const { writeContractAsync } = useWriteContract();
   const queryClient = useQueryClient();
   const [stage, setStage] = useState<CreateAutomationStage>();
@@ -24,7 +25,7 @@ export function useCreateAutomation() {
     },
     onSettled: (safe) => {
       setStage(undefined);
-      queryClient.invalidateQueries({ queryKey: queryKeys.automations(safe) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.automations(safe, chainId) });
     },
   });
 

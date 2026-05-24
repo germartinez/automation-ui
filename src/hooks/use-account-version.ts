@@ -9,10 +9,9 @@ import { useChainId, usePublicClient } from 'wagmi';
 export function useAccountVersion(address?: Address) {
   const chainId = useChainId();
   const publicClient = usePublicClient({ chainId });
-  const enabled = Boolean(address && isAddress(address) && publicClient);
   return useQuery({
     queryKey: queryKeys.accountVersion(address, chainId),
     queryFn: () => fetchAccountVersion(publicClient!, address!),
-    enabled,
+    enabled: Boolean(address && isAddress(address) && publicClient && chainId),
   });
 }

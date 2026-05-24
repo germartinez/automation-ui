@@ -19,11 +19,14 @@ export type Automation = {
   executionCount: number;
 };
 
-export async function fetchAutomations(safe?: Address): Promise<Automation[] | undefined> {
-  if (!safe) return;
+export async function fetchAutomations(
+  safe: Address,
+  chainId: number,
+): Promise<Automation[] | undefined> {
+  if (!safe || !chainId) return;
   try {
     const res = await fetch(
-      `${env.automationServiceUrl}/api/v1/automations?safe=${safe.toLowerCase()}`,
+      `${env.automationServiceUrl}/api/v1/automations?safe=${safe.toLowerCase()}&chainId=${chainId}`,
     );
     if (!res.ok) return;
     const body = (await res.json()) as { automations: Automation[] };
@@ -34,10 +37,15 @@ export async function fetchAutomations(safe?: Address): Promise<Automation[] | u
   }
 }
 
-export async function fetchAutomation(automationHash?: Hex): Promise<Automation | undefined> {
-  if (!automationHash) return;
+export async function fetchAutomation(
+  automationHash: Hex,
+  chainId: number,
+): Promise<Automation | undefined> {
+  if (!automationHash || !chainId) return;
   try {
-    const res = await fetch(`${env.automationServiceUrl}/api/v1/automations/${automationHash}`);
+    const res = await fetch(
+      `${env.automationServiceUrl}/api/v1/automations/${automationHash}?chainId=${chainId}`,
+    );
     if (!res.ok) return;
     const body = await res.json();
     return body;

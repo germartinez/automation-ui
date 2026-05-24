@@ -39,7 +39,7 @@ type Step = {
 type ScheduleAutomationModalProps = {
   open: boolean;
   onClose: () => void;
-  safe: Address;
+  safe?: Address;
 };
 
 export default function ScheduleAutomationModal({

@@ -15,7 +15,7 @@ const GRID_COLS =
   'grid-cols-[44px_minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,0.6fr)_minmax(0,1fr)_90px_28px]';
 
 type AutomationsTableProps = {
-  safe: Address;
+  safe?: Address;
 };
 
 function AutomationsTable({ safe }: AutomationsTableProps) {

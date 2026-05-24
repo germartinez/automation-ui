@@ -13,7 +13,7 @@ import { type Address } from 'viem';
 
 function AutomationsPage() {
   const { address } = useAppKitAccount();
-  const safe = address as Address;
+  const safe = address as Address | undefined;
   const { data: accountVersion } = useAccountVersion(safe);
   const [modalOpen, setModalOpen] = useState(false);
 
