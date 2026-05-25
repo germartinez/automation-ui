@@ -5,6 +5,7 @@ import { explorerAddress, explorerTx } from '@/utils/explorer';
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
 import { useState } from 'react';
 import { isAddress } from 'viem';
+import { useChainId, useEnsAvatar, useEnsName } from 'wagmi';
 import Identicon from './identicon';
 
 type HexDisplayProps = {
@@ -19,6 +20,19 @@ type HexDisplayProps = {
 function HexDisplay({ hex, full, className, identicon, badge, label }: HexDisplayProps) {
   const [copied, setCopied] = useState(false);
   const isEthAddress = isAddress(hex);
+  const chainId = useChainId();
+
+  const { data: ensName, isLoading: isLoadingEnsName } = useEnsName({
+    address: isEthAddress ? hex : undefined,
+    chainId: chainId,
+  });
+  const displayLabel = label ?? ensName ?? undefined;
+
+  const { data: avatar, isLoading: isLoadingAvatar } = useEnsAvatar({
+    name: ensName ?? undefined,
+    chainId: chainId,
+  });
+
   const hexString = isEthAddress
     ? `${hex.slice(0, 6)}...${hex.slice(-4)}`
     : `${hex.slice(0, 10)}...`;
@@ -34,47 +48,63 @@ function HexDisplay({ hex, full, className, identicon, badge, label }: HexDispla
       className={cn(
         'flex items-center gap-2 truncate',
         badge && 'border border-(--border) rounded-full gap-2 py-2 px-2',
-        badge && identicon && !label && 'p-1 pr-3',
-        badge && identicon && label && 'p-1 px-1.5 pr-4',
+        badge && identicon && !displayLabel && 'p-1 pr-3',
+        badge && identicon && displayLabel && 'p-1 px-1.5 pr-4',
         className,
       )}
     >
-      {identicon && <Identicon address={hex} size={label ? 32 : !badge ? 32 : 24} />}
-      <div className="flex flex-col gap-0 truncate">
-        {label && <span className="text-sm text-(--text) font-medium truncate">{label}</span>}
-        <div className="flex items-center gap-1">
-          <span
-            className={cn(
-              'truncate text-sm',
-              badge && 'text-xs',
-              label && 'text-(--text-ter) text-xs',
+      {!isLoadingAvatar && !isLoadingEnsName && (
+        <>
+          {avatar ? (
+            <img
+              src={avatar}
+              alt={displayLabel ?? ''}
+              width={28}
+              height={28}
+              className="rounded-full"
+            />
+          ) : (
+            identicon && <Identicon address={hex} size={displayLabel ? 32 : !badge ? 32 : 24} />
+          )}
+          <div className="flex flex-col gap-0 truncate">
+            {displayLabel && (
+              <span className="text-sm text-(--text) font-medium truncate">{displayLabel}</span>
             )}
-          >
-            {full ? hex : hexString}
-          </span>
-          <button
-            type="button"
-            onClick={copy}
-            className="shrink-0 text-(--text-ter) hover:text-(--text)"
-            aria-label={`Copy ${isEthAddress ? 'address' : 'hash'}`}
-          >
-            {copied ? (
-              <CheckIcon size={12} className="text-(--text-ter) hover:text-(--text-sec)" />
-            ) : (
-              <CopyIcon size={12} className="text-(--text-ter) hover:text-(--text-sec)" />
-            )}
-          </button>
-          <a
-            href={isEthAddress ? explorerAddress(hex) : explorerTx(hex)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 text-(--text-ter) hover:text-(--text-sec)"
-            aria-label="Open in explorer"
-          >
-            <ExternalLinkIcon size={12} />
-          </a>
-        </div>
-      </div>
+            <div className="flex items-center gap-1">
+              <span
+                className={cn(
+                  'truncate text-sm',
+                  badge && 'text-xs',
+                  displayLabel && 'text-(--text-ter) text-xs',
+                )}
+              >
+                {full ? hex : hexString}
+              </span>
+              <button
+                type="button"
+                onClick={copy}
+                className="shrink-0 text-(--text-ter) hover:text-(--text)"
+                aria-label={`Copy ${isEthAddress ? 'address' : 'hash'}`}
+              >
+                {copied ? (
+                  <CheckIcon size={12} className="text-(--text-ter) hover:text-(--text-sec)" />
+                ) : (
+                  <CopyIcon size={12} className="text-(--text-ter) hover:text-(--text-sec)" />
+                )}
+              </button>
+              <a
+                href={isEthAddress ? explorerAddress(hex) : explorerTx(hex)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 text-(--text-ter) hover:text-(--text-sec)"
+                aria-label="Open in explorer"
+              >
+                <ExternalLinkIcon size={12} />
+              </a>
+            </div>
+          </div>
+        </>
+      )}
     </span>
   );
 }

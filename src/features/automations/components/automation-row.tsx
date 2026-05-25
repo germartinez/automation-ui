@@ -60,7 +60,7 @@ export default function AutomationRow({ automation, gridCols, onMore }: Automati
         <p className="text-xs text-(--text-ter) truncate">{cadenceLine}</p>
       </div>
 
-      <HexDisplay hex={to} identicon label="recipient.eth" />
+      <HexDisplay hex={to} identicon />
 
       <div
         className={cn('truncate text-sm', value > 0n ? 'text-(--error-text)' : 'text-(--text-ter)')}

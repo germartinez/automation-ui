@@ -33,7 +33,7 @@ export default function ExecutionRow({ execution, gridCols }: Props) {
         <span className="text-xs text-(--text-ter) truncate">{date && timeAgo(date)}</span>
       </div>
 
-      <HexDisplay hex={execution.from} identicon label="executor.eth" />
+      <HexDisplay hex={execution.from} identicon />
 
       <div className="truncate text-md text-(--text)">
         {formatEtherShort(BigInt(execution.gasUsed))} ETH

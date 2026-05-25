@@ -32,7 +32,7 @@ export default function TransactionCard({ automation }: TransactionCardProps) {
           <Badge dot status="other" label="Sepolia" />
         </Field>
         <Field label="Recipient">
-          <HexDisplay hex={to} full identicon label="recipient.eth" />
+          <HexDisplay hex={to} full identicon />
         </Field>
         <Field label="Value">
           <div className="flex items-baseline gap-1">
