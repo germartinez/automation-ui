@@ -9,6 +9,7 @@ import { decodeTriggerSchedule, shortCadence } from '@/features/automations/util
 import { cn } from '@/utils';
 import { timeUntil } from '@/utils/time';
 import { MoreHorizontalIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { type Hex, formatEther } from 'viem';
 import AutomationIcon from './automation-icon';
 
@@ -34,6 +35,7 @@ function formatWhen(date: Date, timeZone?: string): string {
 export default function AutomationRow({ automation, gridCols, onMore }: AutomationRowProps) {
   const { title, trigger, value, to, isActive } = automation;
   const { timeZone } = useTimezone();
+  const router = useRouter();
 
   const schedule = decodeTriggerSchedule(trigger as Hex);
   const cadenceLine = schedule ? shortCadence(schedule, timeZone) : 'Custom';
@@ -43,7 +45,14 @@ export default function AutomationRow({ automation, gridCols, onMore }: Automati
   const avatarTone = !isActive ? 'muted' : soon ? 'warn' : 'accent';
 
   return (
-    <div className={cn('grid items-center gap-4 p-4 group', gridCols, !isActive && 'opacity-80')}>
+    <div
+      className={cn(
+        'grid items-center gap-4 p-4 group transition-colors duration-100 hover:bg-(--surface-alt) cursor-pointer',
+        gridCols,
+        !isActive && 'opacity-80',
+      )}
+      onClick={() => router.push(`/automations/${automation.automationHash}`)}
+    >
       <AutomationIcon kind="recurrent" tone={avatarTone} />
 
       <div className="flex flex-col gap-0.5">

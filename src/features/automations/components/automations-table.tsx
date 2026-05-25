@@ -5,8 +5,7 @@ import Tabs from '@/components/ui/tabs';
 import AutomationRow from '@/features/automations/components/automation-row';
 import { useAutomations } from '@/features/automations/hooks/use-automations';
 import { cn } from '@/utils';
-import { useRouter } from 'next/navigation';
-import { useMemo, useState, type KeyboardEvent } from 'react';
+import { useMemo, useState } from 'react';
 import { type Address } from 'viem';
 
 const TABS = ['All', 'Active', 'Paused'];
@@ -19,7 +18,6 @@ type AutomationsTableProps = {
 };
 
 function AutomationsTable({ safe }: AutomationsTableProps) {
-  const router = useRouter();
   const { data: automations, isLoading } = useAutomations(safe);
   const [tab, setTab] = useState(0);
 
@@ -67,21 +65,11 @@ function AutomationsTable({ safe }: AutomationsTableProps) {
           </p>
         ) : (
           filteredAutomations.map((automation) => (
-            <div
+            <AutomationRow
               key={automation.automationHash}
-              role="button"
-              tabIndex={0}
-              className="cursor-pointer transition-colors duration-100 hover:bg-(--surface-alt)"
-              onClick={() => router.push(`/automations/${automation.automationHash}`)}
-              onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  router.push(`/automations/${automation.automationHash}`);
-                }
-              }}
-            >
-              <AutomationRow automation={automation} gridCols={GRID_COLS} />
-            </div>
+              automation={automation}
+              gridCols={GRID_COLS}
+            />
           ))
         )}
       </Table>
