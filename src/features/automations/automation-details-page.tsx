@@ -11,7 +11,7 @@ import TransactionCard from './components/transaction-card';
 type Props = { hash: Hex };
 
 export default function AutomationDetailsPage({ hash }: Props) {
-  const { data: automation, isLoading } = useAutomation(hash);
+  const { data: automation } = useAutomation(hash);
 
   return (
     <div className="max-w-6xl mx-auto w-full px-4 pt-8 pb-20 flex flex-col gap-6">

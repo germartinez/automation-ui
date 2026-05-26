@@ -59,8 +59,8 @@ function HexDisplay({ hex, full, className, identicon, badge, label }: HexDispla
             <img
               src={avatar}
               alt={displayLabel ?? ''}
-              width={28}
-              height={28}
+              width={32}
+              height={32}
               className="rounded-full"
             />
           ) : (
