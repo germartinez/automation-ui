@@ -75,7 +75,7 @@ export default function WhenTypeFields({
                 'flex items-center gap-4 text-left rounded-xl p-4 transition-colors duration-150',
                 active
                   ? 'bg-(--accent-subtle) border border-(--accent-subtle)'
-                  : 'border border-(--border-light)',
+                  : 'border border-(--border)',
                 option.disabled && 'cursor-auto opacity-50',
               )}
             >
