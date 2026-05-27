@@ -34,7 +34,7 @@ function AutomationsPage() {
   return (
     <div className="max-w-6xl mx-auto w-full px-4 pt-10 pb-20">
       {banners}
-      <div className="grid gap-6">
+      <div className="flex flex-col gap-6">
         <div className="flex items-end justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-(--text)">Automations</h1>

@@ -20,16 +20,16 @@ export type CreateAutomationParams = {
   title: string;
 };
 
-type WriteContractAsync = ReturnType<typeof useWriteContract>['writeContractAsync'];
+type WriteContract = ReturnType<typeof useWriteContract>['mutateAsync'];
 
 export type CreateAutomationContext = {
   publicClient: PublicClient;
-  writeContractAsync: WriteContractAsync;
+  writeContract: WriteContract;
   onStage?: (stage: CreateAutomationStage | undefined) => void;
 };
 
 export async function createAutomation(
-  { publicClient, writeContractAsync, onStage }: CreateAutomationContext,
+  { publicClient, writeContract, onStage }: CreateAutomationContext,
   params: CreateAutomationParams,
 ): Promise<void> {
   const salt = (params.salt ??
@@ -44,7 +44,7 @@ export async function createAutomation(
 
   if (!enabled) {
     onStage?.('enabling-module');
-    const enableHash = await writeContractAsync({
+    const enableHash = await writeContract({
       address: params.safe,
       abi: safeAbi,
       functionName: 'enableModule',
@@ -54,7 +54,7 @@ export async function createAutomation(
   }
 
   onStage?.('creating');
-  const createHash = await writeContractAsync({
+  const createHash = await writeContract({
     address: AUTOMATION_MODULE_ADDRESS,
     abi: automationModuleAbi,
     functionName: 'createAutomation',

@@ -1,8 +1,6 @@
 'use client';
 
 import { useAutomation } from '@/features/automations/hooks/use-automation';
-import { ArrowLeftIcon } from 'lucide-react';
-import Link from 'next/link';
 import { type Hex } from 'viem';
 import ExecutionsTable from './components/executions-table';
 import NextRunCard from './components/next-run-card';
@@ -14,15 +12,7 @@ export default function AutomationDetailsPage({ hash }: Props) {
   const { data: automation } = useAutomation(hash);
 
   return (
-    <div className="max-w-6xl mx-auto w-full px-4 pt-8 pb-20 flex flex-col gap-6">
-      <Link
-        href="/"
-        className="inline-flex items-center gap-1.5 text-sm text-(--text-sec) hover:text-(--text)"
-      >
-        <ArrowLeftIcon size={14} />
-        Back to automations
-      </Link>
-
+    <div className="max-w-6xl mx-auto w-full px-4 pt-10 pb-20 flex flex-col gap-6">
       {automation && (
         <>
           <h1 className="text-2xl font-semibold text-(--text)">

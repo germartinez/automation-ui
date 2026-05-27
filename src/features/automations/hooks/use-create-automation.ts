@@ -13,14 +13,14 @@ import { useChainId, usePublicClient, useWriteContract } from 'wagmi';
 export function useCreateAutomation() {
   const publicClient = usePublicClient();
   const chainId = useChainId();
-  const { writeContractAsync } = useWriteContract();
+  const { mutateAsync: writeContract } = useWriteContract();
   const queryClient = useQueryClient();
   const [stage, setStage] = useState<CreateAutomationStage>();
 
   const mutation = useMutation({
     mutationFn: async (params: CreateAutomationParams) => {
       if (!publicClient) throw new Error('Wallet not connected');
-      await createAutomation({ publicClient, writeContractAsync, onStage: setStage }, params);
+      await createAutomation({ publicClient, writeContract, onStage: setStage }, params);
       return params.safe;
     },
     onSettled: (safe) => {

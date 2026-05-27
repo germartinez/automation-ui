@@ -8,9 +8,9 @@ import { cn } from '@/utils';
 import { formatEtherShort } from '@/utils/format';
 import { formatDateTime, timeAgo } from '@/utils/time';
 
-type Props = { execution: Execution; gridCols: string };
+type ExecutionRowProps = { execution: Execution; gridCols: string };
 
-export default function ExecutionRow({ execution, gridCols }: Props) {
+export default function ExecutionRow({ execution, gridCols }: ExecutionRowProps) {
   const { timeZone } = useTimezone();
   const date = execution.blockTimestamp ? new Date(execution.blockTimestamp * 1000) : undefined;
 

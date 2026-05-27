@@ -13,5 +13,6 @@ export function useAccountVersion(address?: Address) {
     queryKey: queryKeys.accountVersion(address, chainId),
     queryFn: () => fetchAccountVersion(publicClient!, address!),
     enabled: Boolean(address && isAddress(address) && publicClient && chainId),
+    staleTime: Infinity,
   });
 }
