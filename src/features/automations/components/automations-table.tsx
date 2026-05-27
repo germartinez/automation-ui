@@ -1,17 +1,33 @@
 'use client';
 
-import Table from '@/components/ui/table';
+import Table, { TableHeader, useSorted, type Column } from '@/components/ui/table';
 import Tabs from '@/components/ui/tabs';
 import AutomationRow from '@/features/automations/components/automation-row';
 import { useAutomations } from '@/features/automations/hooks/use-automations';
-import { cn } from '@/utils';
+import type { Automation } from '@/features/automations/queries/automations';
+import { nextRunFor } from '@/features/automations/utils/describe-trigger';
 import { useMemo, useState } from 'react';
-import { type Address } from 'viem';
+import { type Address, type Hex } from 'viem';
 
 const TABS = ['All', 'Active', 'Paused'];
 
 const GRID_COLS =
-  'grid-cols-[44px_minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,0.6fr)_minmax(0,1fr)_90px_28px]';
+  'grid-cols-[44px_minmax(0,1.5fr)_minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,0.6fr)_90px_28px]';
+
+const INFINITE_DATE = new Date(8640000000000000);
+
+const COLUMNS: Column<Automation>[] = [
+  { label: '' },
+  { label: 'Name', key: 'title' },
+  {
+    label: 'Next',
+    key: 'next',
+    getValue: (a) => nextRunFor(a.trigger as Hex, a.isActive) ?? INFINITE_DATE,
+  },
+  { label: 'Recipient', key: 'to' },
+  { label: 'Value', key: 'value' },
+  { label: 'Status', key: 'isActive' },
+];
 
 type AutomationsTableProps = {
   safe?: Address;
@@ -30,41 +46,36 @@ function AutomationsTable({ safe }: AutomationsTableProps) {
     ];
   }, [automations]);
 
-  const filteredAutomations = useMemo(() => {
-    return automations?.filter((a) => {
-      if (tab === 1 && !a.isActive) return false;
-      if (tab === 2 && a.isActive) return false;
-      return true;
-    });
-  }, [automations, tab]);
+  const filtered = useMemo(
+    () =>
+      automations?.filter((a) => {
+        if (tab === 1 && !a.isActive) return false;
+        if (tab === 2 && a.isActive) return false;
+        return true;
+      }),
+    [automations, tab],
+  );
+
+  const { sorted, sort, setSort } = useSorted(filtered, COLUMNS, {
+    key: 'next',
+    direction: 'asc',
+  });
 
   return (
     <div className="flex flex-col gap-2">
       <Tabs tabs={TABS} activeTab={tab} onTabChange={setTab} counts={counts} />
       <Table>
-        {filteredAutomations && filteredAutomations.length > 0 && (
-          <div
-            className={cn(
-              'grid items-center gap-4 p-4 text-xs uppercase font-semibold text-(--text-ter) border-b border-(--border)',
-              GRID_COLS,
-            )}
-          >
-            <span></span>
-            <span className="truncate">Name</span>
-            <span className="truncate">Recipient</span>
-            <span className="truncate">Value</span>
-            <span className="truncate">Next</span>
-            <span className="truncate">Status</span>
-          </div>
+        {sorted && sorted.length > 0 && (
+          <TableHeader columns={COLUMNS} gridCols={GRID_COLS} sort={sort} onSortChange={setSort} />
         )}
         {isLoading ? (
           <p className="px-4 py-8 text-center text-sm text-(--text-sec)">Loading...</p>
-        ) : !filteredAutomations || filteredAutomations.length === 0 ? (
+        ) : !sorted || sorted.length === 0 ? (
           <p className="px-4 py-8 text-center text-sm text-(--text-sec)">
             {tab === 0 ? 'No automations found' : 'No automations match your filters'}
           </p>
         ) : (
-          filteredAutomations.map((automation) => (
+          sorted.map((automation) => (
             <AutomationRow
               key={automation.automationHash}
               automation={automation}

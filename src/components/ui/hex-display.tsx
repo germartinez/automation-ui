@@ -24,13 +24,13 @@ function HexDisplay({ hex, full, className, identicon, badge, label }: HexDispla
 
   const { data: ensName, isLoading: isLoadingEnsName } = useEnsName({
     address: isEthAddress ? hex : undefined,
-    chainId: chainId,
+    chainId,
   });
   const displayLabel = label ?? ensName ?? undefined;
 
   const { data: avatar, isLoading: isLoadingAvatar } = useEnsAvatar({
     name: ensName ?? undefined,
-    chainId: chainId,
+    chainId,
   });
 
   const hexString = isEthAddress

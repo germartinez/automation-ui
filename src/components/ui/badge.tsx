@@ -28,7 +28,7 @@ const statusMap: Record<Status, { dot: string; bgClass: string; textClass: strin
   },
   disabled: {
     dot: `var(--text-ter)`,
-    bgClass: 'bg-(--surface)-alt',
+    bgClass: 'bg-(--surface-alt)',
     textClass: 'text-(--text-sec)',
   },
 };
