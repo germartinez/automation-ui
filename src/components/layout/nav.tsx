@@ -3,6 +3,7 @@
 import Button from '@/components/ui/button';
 import ChainSelector from '@/components/ui/chain-selector';
 import HexDisplay from '@/components/ui/hex-display';
+import { useTheme } from '@/context/ThemeProvider';
 import { cn } from '@/utils';
 import { useAppKit, useAppKitAccount, useDisconnect } from '@reown/appkit/react';
 import Link from 'next/link';
@@ -15,13 +16,24 @@ function Nav({ className }: { className?: string }) {
   const { open } = useAppKit();
   const { address } = useAppKitAccount();
   const { disconnect } = useDisconnect();
+  const theme = useTheme();
+  const isDark = theme.resolved === 'dark';
 
   return (
     <div className="border-b sticky top-0 z-10 border-(--border) bg-(--surface)">
       <div className={cn('flex items-center justify-between px-4', className)}>
         <div className="flex items-center gap-4 h-14">
-          <Link href="/" className="font-semibold text-xl">
-            Automations
+          <Link href="/" className="font-medium text-3xl">
+            <div className="flex items-center gap-2" style={{ fontFamily: 'Georgia, serif' }}>
+              <img
+                src={isDark ? '/assets/logo-white.png' : '/assets/logo-black.png'}
+                alt="Klavias"
+                width={36}
+                height={36}
+                className="shrink-0"
+              />
+              Klavias
+            </div>
           </Link>
           <div className="hidden md:flex items-stretch h-14">
             {links.map((l) => {
