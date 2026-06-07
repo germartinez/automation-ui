@@ -26,10 +26,12 @@ function Modal({ open, onClose, children }: ModalProps) {
   if (!open) return;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="fixed inset-0 bg-black/40" onClick={onClose} aria-hidden />
-      <div role="dialog" aria-modal className="relative w-full max-w-xl">
-        {children}
+      <div className="relative flex min-h-full items-center justify-center p-4">
+        <div role="dialog" aria-modal className="relative w-full max-w-4xl">
+          {children}
+        </div>
       </div>
     </div>
   );

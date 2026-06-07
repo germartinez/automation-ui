@@ -122,13 +122,13 @@ export default function NextRunCard({ isActive, trigger }: NextRunCardProps) {
         {days > 0 && (
           <>
             <CountdownUnit value={String(days)} label="days" />
-            <span className="text-5xl font-light leading-none text-(--text-ter) self-start">:</span>
+            <span className="text-5xl font-light text-(--text-ter) self-start">:</span>
           </>
         )}
         <CountdownUnit value={pad2(hours)} label="hours" />
-        <span className="text-5xl font-light leading-none text-(--text-ter) self-start">:</span>
+        <span className="text-5xl font-light text-(--text-ter) self-start">:</span>
         <CountdownUnit value={pad2(minutes)} label="minutes" />
-        <span className="text-5xl font-light leading-none text-(--text-ter) self-start">:</span>
+        <span className="text-5xl font-light text-(--text-ter) self-start">:</span>
         <CountdownUnit value={pad2(seconds)} label="seconds" />
       </div>
       <div className="border-t border-(--border) pt-4 px-4 flex flex-col gap-2">

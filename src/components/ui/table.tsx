@@ -107,7 +107,7 @@ function Table({ children, className }: TableProps) {
   return (
     <div
       className={cn(
-        'bg-(--surface) border border-(--border) rounded-xl overflow-hidden h-fit divide-y divide-(--border-light)',
+        'bg-(--surface) border border-(--border) rounded-xl overflow-hidden h-fit divide-y divide-(--border)',
         className,
       )}
     >

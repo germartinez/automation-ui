@@ -53,8 +53,8 @@ function Tile({ label, value, unit, highlight }: TileProps) {
   return (
     <div
       className={cn(
-        'rounded-xl border p-4 flex flex-col',
-        highlight ? 'bg-(--accent-subtle) border-transparent' : 'bg-(--surface) border-(--border)',
+        'rounded-xl p-4 flex flex-col',
+        highlight ? 'bg-(--accent-subtle)' : 'bg-(--surface) border border-(--border)',
       )}
     >
       <span

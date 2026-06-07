@@ -17,8 +17,9 @@ function AutomationsPage() {
   const { data: accountVersion } = useAccountVersion(safe);
   const [modalOpen, setModalOpen] = useState(false);
 
+  // TODO: Move banners to a new layout component
   const banners = (
-    <div className="grid gap-2">
+    <>
       {accountVersion?.status === 'incompatible' && (
         <StatusBanner state="error" message="Connected account must be a Safe Smart Account." />
       )}
@@ -28,7 +29,7 @@ function AutomationsPage() {
           message={`Connected account version must be greater than or equal to v1.3.0.`}
         />
       )}
-    </div>
+    </>
   );
 
   return (
@@ -38,14 +39,12 @@ function AutomationsPage() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-(--text)">Automations</h1>
-            <p className="text-sm text-(--text-sec) mt-1">
-              Recurring on-chain transactions for this wallet
-            </p>
           </div>
           <Button
             variant="primary"
             onClick={() => setModalOpen(true)}
             disabled={accountVersion?.status !== 'ok'}
+            size="sm"
           >
             <PlusIcon size={14} />
             New automation

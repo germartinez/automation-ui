@@ -63,11 +63,10 @@ export default function ExecutionsTable({ automation }: ExecutionsTableProps) {
     return out;
   }, [executions, missing, tab]);
 
-  const {
-    sorted,
-    sort,
-    setSort,
-  } = useSorted(filtered, COLUMNS, { key: 'time', direction: 'desc' });
+  const { sorted, sort, setSort } = useSorted(filtered, COLUMNS, {
+    key: 'time',
+    direction: 'desc',
+  });
 
   return (
     <div className="flex flex-col gap-2">
@@ -87,7 +86,8 @@ export default function ExecutionsTable({ automation }: ExecutionsTableProps) {
                 : 'No missing executions.'}
           </p>
         ) : (
-          sorted && sorted.map((r) =>
+          sorted &&
+          sorted.map((r) =>
             r.kind === 'executed' ? (
               <ExecutionRow key={`e-${r.data.txHash}`} execution={r.data} gridCols={GRID_COLS} />
             ) : (
