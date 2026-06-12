@@ -68,8 +68,8 @@ export default function AutomationRow({ automation, gridCols }: AutomationRowPro
   const { title, trigger, value, to, isActive, safe, automationHash } = automation;
   const { timeZone } = useTimezone();
   const router = useRouter();
-  const { toggle, submitting: toggling } = useToggleAutomation(safe as Address);
-  const { remove, submitting: removing } = useDeleteAutomation(safe as Address);
+  const { toggleAutomation, submitting: toggling } = useToggleAutomation(safe as Address);
+  const { removeAutomation, submitting: removing } = useDeleteAutomation(safe as Address);
   const [menuOpen, setMenuOpen] = useState(false);
   const submitting = toggling || removing;
 
@@ -77,7 +77,7 @@ export default function AutomationRow({ automation, gridCols }: AutomationRowPro
     e.stopPropagation();
     setMenuOpen(false);
     try {
-      await toggle({ automationHash: automationHash as Hex, isActive });
+      await toggleAutomation({ automationHash: automationHash as Hex, isActive });
     } catch (err) {
       console.error(err);
     }
@@ -87,7 +87,7 @@ export default function AutomationRow({ automation, gridCols }: AutomationRowPro
     e.stopPropagation();
     setMenuOpen(false);
     try {
-      await remove({ automationHash: automationHash as Hex });
+      await removeAutomation({ automationHash: automationHash as Hex });
     } catch (err) {
       console.error(err);
     }
