@@ -2,10 +2,12 @@
 
 import { cn } from '@/utils';
 import { explorerAddress, explorerTx } from '@/utils/explorer';
+import { mainnet } from '@reown/appkit/networks';
+import { useQuery } from '@tanstack/react-query';
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
 import { useState } from 'react';
 import { isAddress } from 'viem';
-import { useChainId, useEnsAvatar, useEnsName } from 'wagmi';
+import { usePublicClient } from 'wagmi';
 import Identicon from './identicon';
 
 type HexDisplayProps = {
@@ -19,25 +21,30 @@ type HexDisplayProps = {
 
 function HexDisplay({ hex, full, className, identicon, badge, label }: HexDisplayProps) {
   const [copied, setCopied] = useState(false);
+  const publicClient = usePublicClient();
   const isEthAddress = isAddress(hex);
-  const chainId = useChainId();
+  const address = isEthAddress ? (hex as `0x${string}`) : undefined;
 
-  const { data: ensName, isLoading: isLoadingEnsName } = useEnsName({
-    address: isEthAddress ? hex : undefined,
-    chainId,
+  const { data: ensName, isLoading: isLoadingEnsName } = useQuery({
+    queryKey: ['ensName', { chainId: mainnet.id, address: address?.toLowerCase() }],
+    queryFn: () => publicClient!.getEnsName({ address: address! }),
+    enabled: Boolean(address && publicClient),
   });
+
+  const { data: avatar, isLoading: isLoadingAvatar } = useQuery({
+    queryKey: ['ensAvatar', { chainId: mainnet.id, name: ensName ?? undefined }],
+    queryFn: () => publicClient!.getEnsAvatar({ name: ensName! }),
+    enabled: Boolean(ensName && publicClient),
+  });
+
   const displayLabel = label ?? ensName ?? undefined;
-
-  const { data: avatar, isLoading: isLoadingAvatar } = useEnsAvatar({
-    name: ensName ?? undefined,
-    chainId,
-  });
 
   const hexString = isEthAddress
     ? `${hex.slice(0, 6)}...${hex.slice(-4)}`
     : `${hex.slice(0, 10)}...`;
 
-  const copy = () => {
+  const copy = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigator.clipboard.writeText(hex).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
@@ -96,6 +103,7 @@ function HexDisplay({ hex, full, className, identicon, badge, label }: HexDispla
                 href={isEthAddress ? explorerAddress(hex) : explorerTx(hex)}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
                 className="shrink-0 text-(--text-ter) hover:text-(--text-sec)"
                 aria-label="Open in explorer"
               >
